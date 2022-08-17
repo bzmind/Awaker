@@ -26,6 +26,4 @@ Windows Alarms: `HKEY_USERS\S-1-5-21-3773018586-4214865330-3152829066-1001\SOFTW
 The service will try to remove the Enabled key once the service starts, and then on PowerChange event and then when the service stops. The PowerChange event will trigger when the computer goes into sleep mode or resumes to work after being in sleep mode, in this case, I only use the Resume mode, because that's when the notifications would stop working.
 <br/>
 <br/>
-But the SID of every computer (and it's user accounts) is different, so to grab the SID of all the current logged in users, I fortunately encountered [this](https://www.softwaremeadows.com/posts/writing-to-current-users-registry-when/) blog, and I used the WindowsIdentityHelper class introduced in there.
-<br/>
-So by using that we grab the SID of all logged in users, and then by that we can navigate to each user's registery keys and then delete the Enabled value for each app.
+But the SID of every computer (and it's user accounts) is different, so to grab the SID of all the current logged in users, I fortunately encountered [this](https://www.softwaremeadows.com/posts/writing-to-current-users-registry-when/) blog, and I used the WindowsIdentityHelper class introduced in there. So by using that we grab the SID of all logged in users, and then we can navigate to each user's registery keys and then delete the Enabled value for each app.
