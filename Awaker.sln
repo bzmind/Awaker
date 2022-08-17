@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32602.215
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Awaker", "Awaker.csproj", "{BA535229-47CB-4025-8B72-800D70F8CEE7}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{7ACE2844-2CD7-4992-9FBB-96528808A170}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Awaker", "src\Awaker\Awaker.csproj", "{0A61652F-0F44-44E6-BC99-CFE93A573A62}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,13 +13,16 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{BA535229-47CB-4025-8B72-800D70F8CEE7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BA535229-47CB-4025-8B72-800D70F8CEE7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BA535229-47CB-4025-8B72-800D70F8CEE7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BA535229-47CB-4025-8B72-800D70F8CEE7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0A61652F-0F44-44E6-BC99-CFE93A573A62}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0A61652F-0F44-44E6-BC99-CFE93A573A62}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0A61652F-0F44-44E6-BC99-CFE93A573A62}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0A61652F-0F44-44E6-BC99-CFE93A573A62}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{0A61652F-0F44-44E6-BC99-CFE93A573A62} = {7ACE2844-2CD7-4992-9FBB-96528808A170}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {38E23351-D640-4D02-AEA3-DAA86E97E82F}

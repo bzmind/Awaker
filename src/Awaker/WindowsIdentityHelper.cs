@@ -64,6 +64,6 @@ class WindowsIdentityHelper
         }
 
         if (errs.Length > 0) { throw new Exception(errs); }
-        return users.Distinct().ToList();
+        return users.DistinctBy(identity => identity.Owner.Value).ToList();
     }
 }

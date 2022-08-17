@@ -13,7 +13,7 @@ public class Awaker
 
     public void Start()
     {
-        Console.WriteLine("Started");
+        Console.WriteLine("Starting");
         ResetNotifications();
         SystemEvents.PowerModeChanged -= OnPowerChange;
         SystemEvents.PowerModeChanged += OnPowerChange;
@@ -21,12 +21,14 @@ public class Awaker
 
     public void Stop()
     {
+        Console.WriteLine("Stopping");
         ResetNotifications();
         SystemEvents.PowerModeChanged -= OnPowerChange;
     }
 
     private void OnPowerChange(object sender, PowerModeChangedEventArgs e)
     {
+        Console.WriteLine($"Power change detected: {e.Mode}");
         if (e.Mode != PowerModes.Resume)
             return;
         ResetNotifications();
@@ -38,31 +40,25 @@ public class Awaker
         {
             var userSid = user.Owner.Value;
 
-            using var windowsAlarmRegKey = Registry.CurrentUser.OpenSubKey(
-            @$"{NotificationsSettings}\{WindowsAlarms}",
-            true) ?? Registry.Users.OpenSubKey(
+            using var windowsAlarmRegKey = Registry.Users.OpenSubKey(
             @$"{userSid}\{NotificationsSettings}\{WindowsAlarms}",
             true);
 
             if (windowsAlarmRegKey != null)
             {
-                windowsAlarmRegKey.SetValue("Enabled", 0, RegistryValueKind.DWord);
-                windowsAlarmRegKey.SetValue("Enabled", 1, RegistryValueKind.DWord);
-                Console.WriteLine($"Windows Alarms Enabled = {windowsAlarmRegKey.GetValue("Enabled")}");
+                windowsAlarmRegKey.DeleteValue("Enabled", false);
+                Console.WriteLine("Windows Alarms Enabled");
                 windowsAlarmRegKey.Close();
             }
 
-            using var alarmClockHdRegKey = Registry.CurrentUser.OpenSubKey(
-                @$"{NotificationsSettings}\{AlarmClockHd}",
-                true) ?? Registry.Users.OpenSubKey(
+            using var alarmClockHdRegKey = Registry.Users.OpenSubKey(
                 @$"{userSid}\{NotificationsSettings}\{AlarmClockHd}",
                 true);
 
             if (alarmClockHdRegKey != null)
             {
-                alarmClockHdRegKey.SetValue("Enabled", 0, RegistryValueKind.DWord);
-                alarmClockHdRegKey.SetValue("Enabled", 1, RegistryValueKind.DWord);
-                Console.WriteLine($"Alarm Clock Hd Enabled = {alarmClockHdRegKey.GetValue("Enabled")}");
+                alarmClockHdRegKey.DeleteValue("Enabled", false);
+                Console.WriteLine("Alarm Clock Hd Enabled");
                 alarmClockHdRegKey.Close();
             }
         }
