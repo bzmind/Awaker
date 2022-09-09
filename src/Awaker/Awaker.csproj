@@ -8,6 +8,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <COMReference Include="COMAdmin">
+      <WrapperTool>tlbimp</WrapperTool>
+      <VersionMinor>0</VersionMinor>
+      <VersionMajor>1</VersionMajor>
+      <Guid>f618c513-dfb8-11d1-a2cf-00805fc79235</Guid>
+      <Lcid>0</Lcid>
+      <Isolated>false</Isolated>
+      <EmbedInteropTypes>false</EmbedInteropTypes>
+    </COMReference>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Topshelf" Version="4.3.0" />
   </ItemGroup>
 

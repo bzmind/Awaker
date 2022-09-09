@@ -8,7 +8,8 @@
     ".NETCoreApp,Version=v6.0": {
       "Awaker/1.0.0": {
         "dependencies": {
-          "Topshelf": "4.3.0"
+          "Topshelf": "4.3.0",
+          "Interop.COMAdmin": "1.0.0.0"
         },
         "runtime": {
           "Awaker.dll": {}
@@ -221,6 +222,14 @@
             "fileVersion": "4.3.0.0"
           }
         }
+      },
+      "Interop.COMAdmin/1.0.0.0": {
+        "runtime": {
+          "Interop.COMAdmin.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
       }
     }
   },
@@ -397,6 +406,11 @@
       "sha512": "sha512-z+jcfvIg3uewe9lBkWpXslxEafqPusV7T4B/Y2TiBdixnfbfFG19YgnnsZMlP5kG9zzPsx6VceYUNzfxVEQjcA==",
       "path": "topshelf.serviceinstaller/4.3.0",
       "hashPath": "topshelf.serviceinstaller.4.3.0.nupkg.sha512"
+    },
+    "Interop.COMAdmin/1.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
     }
   }
 }

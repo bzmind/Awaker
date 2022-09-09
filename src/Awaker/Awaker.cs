@@ -1,5 +1,7 @@
-﻿using System.Reflection;
+﻿using System.Diagnostics;
+using System.Reflection;
 using Microsoft.Win32;
+using Topshelf;
 
 namespace Awaker;
 
@@ -13,25 +15,22 @@ public class Awaker
 
     public void Start()
     {
-        Console.WriteLine("Starting");
+        Logger.Log("Starting the service", EventLogEntryType.Information);
         ResetNotifications();
-        SystemEvents.PowerModeChanged -= OnPowerChange;
-        SystemEvents.PowerModeChanged += OnPowerChange;
     }
 
     public void Stop()
     {
-        Console.WriteLine("Stopping");
-        ResetNotifications();
-        SystemEvents.PowerModeChanged -= OnPowerChange;
+        Logger.Log("Stopping the service", EventLogEntryType.Information);
     }
 
-    private void OnPowerChange(object sender, PowerModeChangedEventArgs e)
+    public bool OnPowerChange(PowerEventArguments e)
     {
-        Console.WriteLine($"Power change detected: {e.Mode}");
-        if (e.Mode != PowerModes.Resume)
-            return;
+        Logger.Log($"Power change detected: {e.EventCode}", EventLogEntryType.Information);
+        if (e.EventCode != PowerEventCode.ResumeSuspend)
+            return false;
         ResetNotifications();
+        return true;
     }
 
     private void ResetNotifications()
@@ -39,27 +38,44 @@ public class Awaker
         foreach (var user in WindowsIdentityHelper.GetLoggedOnUsers())
         {
             var userSid = user.Owner.Value;
+            Logger.Log($"User SID: {userSid}", EventLogEntryType.Information);
 
-            using var windowsAlarmRegKey = Registry.Users.OpenSubKey(
-            @$"{userSid}\{NotificationsSettings}\{WindowsAlarms}",
-            true);
+            using var alarmClockHdRegKey = Registry.Users
+                .OpenSubKey(@$"{userSid}\{NotificationsSettings}\{AlarmClockHd}", true);
 
-            if (windowsAlarmRegKey != null)
-            {
-                windowsAlarmRegKey.DeleteValue("Enabled", false);
-                Console.WriteLine("Windows Alarms Enabled");
-                windowsAlarmRegKey.Close();
-            }
-
-            using var alarmClockHdRegKey = Registry.Users.OpenSubKey(
-                @$"{userSid}\{NotificationsSettings}\{AlarmClockHd}",
-                true);
+            Logger.Log($"Is AlarmClockHdRegistryKey null: {alarmClockHdRegKey == null}",
+                EventLogEntryType.Information);
 
             if (alarmClockHdRegKey != null)
             {
                 alarmClockHdRegKey.DeleteValue("Enabled", false);
-                Console.WriteLine("Alarm Clock Hd Enabled");
+                alarmClockHdRegKey.SetValue("Enabled", 0, RegistryValueKind.DWord);
+                alarmClockHdRegKey.DeleteValue("Enabled", false);
+                var enabled = alarmClockHdRegKey.GetValue("Enabled") == null;
+                if (enabled)
+                    Logger.Log("Enabled Alarm Clock Hd", EventLogEntryType.SuccessAudit);
+                else
+                    Logger.Log("Could not enable Alarm Clock Hd", EventLogEntryType.FailureAudit);
                 alarmClockHdRegKey.Close();
+            }
+
+            using var windowsAlarmRegKey = Registry.Users
+                .OpenSubKey(@$"{userSid}\{NotificationsSettings}\{WindowsAlarms}", true);
+
+            Logger.Log($"Is WindowsAlarmRegistryKey null: {windowsAlarmRegKey == null}",
+                EventLogEntryType.Information);
+
+            if (windowsAlarmRegKey != null)
+            {
+                windowsAlarmRegKey.DeleteValue("Enabled", false);
+                windowsAlarmRegKey.SetValue("Enabled", 0, RegistryValueKind.DWord);
+                windowsAlarmRegKey.DeleteValue("Enabled", false);
+                var enabled = windowsAlarmRegKey.GetValue("Enabled") == null;
+                if (enabled)
+                    Logger.Log("Enabled Windows Alarms", EventLogEntryType.SuccessAudit);
+                else
+                    Logger.Log("Could not enable Windows Alarms", EventLogEntryType.FailureAudit);
+                windowsAlarmRegKey.Close();
             }
         }
     }

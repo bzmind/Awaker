@@ -7,10 +7,13 @@ var exitCode = HostFactory.Run(hostConfigurator =>
         hostSettings.ConstructUsing(awaker => new Awaker.Awaker());
         hostSettings.WhenStarted(awaker => awaker.Start());
         hostSettings.WhenStopped(awaker => awaker.Stop());
+        hostSettings.WhenPowerEvent((awaker, arguments) => awaker.OnPowerChange(arguments));
     });
 
     hostConfigurator.RunAsLocalSystem();
-    hostConfigurator.EnableServiceRecovery(configurator => configurator.RestartService(TimeSpan.FromSeconds(5)));
+    hostConfigurator.EnablePowerEvents();
+    hostConfigurator.StartAutomatically();
+    hostConfigurator.DependsOnEventLog();
     hostConfigurator.SetServiceName("AwakerService");
     hostConfigurator.SetDisplayName("Awaker");
     hostConfigurator.SetDescription("Awaker enables notifications for the Windows Alarm app and " +
