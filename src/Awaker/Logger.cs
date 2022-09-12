@@ -7,7 +7,7 @@ public static class Logger
     private const string EventLogSource = "Awaker Service";
     private const string EventLogName = "Awaker";
 
-    public static void Log(string message, EventLogEntryType entryType)
+    public static void Log(string message)
     {
         try
         {
@@ -19,7 +19,27 @@ public static class Logger
 
             using var eventLog = new EventLog(EventLogName);
             eventLog.Source = EventLogSource;
-            eventLog.WriteEntry(message, entryType);
+            eventLog.WriteEntry(message, EventLogEntryType.Information);
+        }
+        catch (Exception e)
+        {
+            var error = e.Message + Environment.NewLine + e.StackTrace;
+            using var eventLog = new EventLog("Application");
+            eventLog.Source = EventLogSource;
+            eventLog.WriteEntry(error, EventLogEntryType.Error);
+        }
+    }
+
+    public static void ClearLogsIfMoreThan(int amount)
+    {
+        try
+        {
+            if (!EventLog.SourceExists(EventLogSource))
+                return;
+            using var eventLog = new EventLog(EventLogName);
+            eventLog.Source = EventLogSource;
+            if (eventLog.Entries.Count >= amount)
+                eventLog.Clear();
         }
         catch (Exception e)
         {
