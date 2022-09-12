@@ -10,6 +10,8 @@ And to disable it, navigate to that same folder, and run this:
 > Awaker.exe stop uninstall
 ```
 I use Windows Event Viewer for logging, you can view the logs by opening the Event Viewer and then expanding the Applicatons and Services Logs section:
+<br/>
+<br/>
 ![image](https://user-images.githubusercontent.com/77694696/189342715-9c4b3b9b-7446-4565-9519-f45294be0071.png)
 ### Why I made it:
 I use an app called Alarm Cock HD for daily reminders, which I think relies on the Windows Alarms app, and the problem was that they both would get disabled by windows whenever the computer would go into sleep mode (I'm not sure, but mostly after the computer is in sleep mode, they would get disabled), so I'd miss some reminders and most of the time I didn't feel like it to go into windows notifications settings and enable both of them manually, so I did what every programmer does, I automated it :o)
