@@ -57,4 +57,5 @@ Now the problem was the connection string, so I had to point to this location: `
 <br/>
 <br/>
 So, I searched about how to grab this path from a Local System account, and I found [this](https://stackoverflow.com/questions/11201308/get-appdata-local-folder-path-in-c-sharp-windows-service) question on SO, forget about the first answer, the second answer (as of now) was what I needed, it is saying that you can grab these paths from the registry keys as well! Here's the location for those paths:
+<br/>
 `HKEY_USERS\{YourSid}\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Folders` on the right hand side you can view all the paths, so I used the same way as step 1, I grabbed the SID of current logged on users and navigated to this path and used the "Local AppData" registry key's value to grab the path to AppData folder of the user, and then appended the rest of the database path to it. Now that I have the full connection string I just execute the query above after removing the Enabled registry keys.
