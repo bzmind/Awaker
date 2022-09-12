@@ -32,11 +32,11 @@ Alarm Clock Hd: `HKEY_USERS\S-1-5-21-3773018586-4214865330-3152829066-1001\SOFTW
 Windows Alarms: `HKEY_USERS\S-1-5-21-3773018586-4214865330-3152829066-1001\SOFTWARE\Microsoft\Windows\CurrentVersion\Notifications\Settings\Microsoft.WindowsAlarms_8wekyb3d8bbwe!App`
 <br/>
 <br/>
-The service will try to remove the Enabled key once the service starts, and also when the Windows power status change event occurres, this event will trigger whenever a change has occurred in the power status of Windows, like when it goes into sleep mode or resumes after being in sleep mode. In this case, I only use the Resume mode, because that's when the notifications would stop working (I guess).
+The service will try to remove the Enabled key once the service starts, and also when the Windows power status change event occures, this event will trigger whenever a change has occurred in the power status of Windows, like when it goes into sleep mode or resumes after being in sleep mode. In this case, I only use the Resume mode, because that's when the notifications would stop working (I guess).
 <br/>
 <br/>
 Now, the SID of every computer (and its user accounts) is different, so to grab the SID of all the current logged in users, I fortunately encountered [this](https://www.softwaremeadows.com/posts/writing-to-current-users-registry-when/) blog, and I used the WindowsIdentityHelper class introduced in there. So by using that we grab the SID of all logged in users, and then we can navigate to each user's registry keys and then delete the Enabled key for each of the alarm apps.
-#### Step 2: Enable alarm apps from Windows notifications database
+#### Step 2: Enable alarm apps from the Windows notifications database
 After I edited their registries, I thought all of it is done, but it wasn't, after searching for a while, I encountered [this](https://docs.microsoft.com/en-us/answers/questions/314561/enforcing-notifications-from-specific-applications.html) question which suggests that Windows also has a database which controls which apps can send toast notifications, so I guess enabling them with registry keys would fix half of the problem, they were sorta enabled, but not completely because their toast notifications wouldn't appear. The database is located under this path: `C:\Users\Your_Username\AppData\Local\Microsoft\Windows\Notifications\wpndatabase.db`
 <br/>
 <br/>
