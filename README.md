@@ -1,5 +1,5 @@
 # Awaker
-### How to use:
+### How to install:
 Run CMD as administrator, change your directory to "src\Awaker\bin\Debug\net6.0", and install the service:
 <br/>
 ```batch
