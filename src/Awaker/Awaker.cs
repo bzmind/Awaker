@@ -130,7 +130,8 @@ public class Awaker
                 const string sql = @"
                     UPDATE HandlerSettings AS HS
                     SET Value = 1
-                    WHERE EXISTS (
+                    WHERE EXISTS
+                    (
                     	SELECT *
                     	FROM NotificationHandler AS NH
                     	WHERE (NH.PrimaryId LIKE '%AlarmClockHD%' OR NH.PrimaryId LIKE '%WindowsAlarms%')
