@@ -1,10 +1,12 @@
 ﻿using System.Diagnostics;
 using System.Reflection;
+using System.Runtime.Versioning;
 using Microsoft.Win32;
 using Topshelf;
 
 namespace Awaker;
 
+[SupportedOSPlatform("windows")]
 public class Awaker
 {
     private static readonly string AppName = Assembly.GetExecutingAssembly().GetName().Name;
