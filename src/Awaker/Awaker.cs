@@ -20,14 +20,14 @@ public class Awaker
 
     public void Start()
     {
-        Logger.ClearLogsIfMoreThan(100);
-        Logger.Log("Starting the service");
+        Logger.ClearLogsIfMoreThan(500);
         if (!WindowsIdentityHelper.GetLoggedOnUsers().Any())
         {
             Logger.Log("No logged in user found, waiting for 5 seconds to try again...");
             Pause(5000, (o, e) => Start());
             return;
         }
+        Logger.Log("Starting the service");
         EnableNotificationsInRegistries();
         EnableNotificationsInWindowsNotificationsDatabase();
     }
@@ -112,7 +112,7 @@ public class Awaker
             {
                 var appDataPath = shellFoldersRegistry.GetValue("Local AppData");
                 Logger.Log(shellFoldersRegistry.GetValue("Local AppData") == null
-                    ? "AppData registry key not found" : "AppData registry key found");
+                    ? "Local AppData registry key not found" : "Local AppData registry key found");
                 if (appDataPath != null)
                     databaseDirectory = appDataPath.ToString();
                 shellFoldersRegistry.Close();
