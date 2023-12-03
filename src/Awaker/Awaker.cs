@@ -5,6 +5,7 @@ using System.Timers;
 using Dapper;
 using Microsoft.Win32;
 using Topshelf;
+using Timer = System.Timers.Timer;
 
 namespace Awaker;
 
@@ -17,26 +18,30 @@ public class Awaker
     private const string NotificationsSettings = @"SOFTWARE\Microsoft\Windows\CurrentVersion\Notifications\Settings";
     private const string WindowsAlarms = "Microsoft.WindowsAlarms_8wekyb3d8bbwe!App";
     private const string AlarmClockHd = "AntaraSoftware.AlarmClockHD_7jhd16s0b93qm!App";
+    private Timer _timer;
 
     public void Start()
     {
         Logger.ClearLogsIfMoreThan(500);
-        if (!WindowsIdentityHelper.GetLoggedOnUsers().Any())
+        if (WindowsIdentityHelper.GetLoggedOnUsers().Count == 0)
         {
             Logger.Log("No logged in user found, waiting for 5 seconds to try again...");
-            Pause(5000, (o, e) => Start());
+            Pause(5000, (_, _) => Start());
             return;
         }
         Logger.Log("Starting the service");
-        EnableNotificationsInRegistries();
-        EnableNotificationsInWindowsNotificationsDatabase();
+
+        _timer = new Timer(1000);
+        _timer.Elapsed += (_, _) => EnableNotifications();
+        _timer.Start();
     }
 
     public void Stop()
     {
-        Logger.Log("Stopping the service");
-        EnableNotificationsInRegistries();
-        EnableNotificationsInWindowsNotificationsDatabase();
+        Logger.Log("Stopping the service"); 
+        EnableNotifications();
+        _timer.Stop();
+        _timer.Dispose();
     }
 
     public bool OnPowerChange(PowerEventArguments e)
@@ -44,9 +49,14 @@ public class Awaker
         Logger.Log($"Power change detected: {e.EventCode}");
         if (e.EventCode != PowerEventCode.ResumeSuspend)
             return false;
+        EnableNotifications();
+        return true;
+    }
+
+    public void EnableNotifications()
+    {
         EnableNotificationsInRegistries();
         EnableNotificationsInWindowsNotificationsDatabase();
-        return true;
     }
 
     private void EnableNotificationsInRegistries()
@@ -150,7 +160,7 @@ public class Awaker
 
     private void Pause(double timeInMilliseconds, ElapsedEventHandler callback)
     {
-        var delayTimer = new System.Timers.Timer();
+        var delayTimer = new Timer();
         delayTimer.Interval = timeInMilliseconds;
         delayTimer.AutoReset = false;
         delayTimer.Elapsed += callback;
