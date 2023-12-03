@@ -166,20 +166,4 @@ public class Awaker
         delayTimer.Elapsed += callback;
         delayTimer.Start();
     }
-
-    // This method is not used
-    private void SetProgramToRunAsStartup()
-    {
-        using var regKey = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", true);
-
-        if (regKey != null)
-        {
-            var previousValue = regKey.GetValue(AppName);
-            if (previousValue == null || previousValue.ToString() != ExecutablePath)
-            {
-                regKey.SetValue(AppName, ExecutablePath);
-                regKey.Close();
-            }
-        }
-    }
 }
